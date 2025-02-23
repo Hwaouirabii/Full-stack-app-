@@ -1,10 +1,40 @@
 <h2>Product List</h2>
-<div class="product-grid">
-  <div *ngFor="let product of products" class="product-card">
-    <img [src]="product.image" [alt]="product.name" class="product-image">
-    <h3>{{ product.name }}</h3>
-    <p>{{ product.description }}</p>
-    <p><strong>Price:</strong> ${{ product.price }}</p>
-    <button (click)="addToCart(product)">Add to Cart</button>
+
+<!-- Search Bar -->
+<div class="search-bar">
+  <input type="text" [(ngModel)]="searchQuery" placeholder="Search products..." (input)="filterProducts()">
+</div>
+
+<!-- Category Filter -->
+<div class="category-filter">
+  <label for="category">Filter by Category:</label>
+  <select id="category" [(ngModel)]="selectedCategory" (change)="filterProducts()">
+    <option value="">All</option>
+    <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+  </select>
+</div>
+
+<!-- Product Grid -->
+<div *ngIf="filteredProducts.length > 0; else noProducts">
+  <div class="product-grid">
+    <div *ngFor="let product of filteredProducts" class="product-card">
+      <img [src]="product.image" [alt]="product.name" class="product-image">
+      <h3>{{ product.name }}</h3>
+      <p>{{ product.description }}</p>
+      <p><strong>Price:</strong> ${{ product.price }}</p>
+      <p><strong>Category:</strong> {{ product.category }}</p>
+      <button (click)="addToCart(product)">Add to Cart</button>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination">
+    <button (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
   </div>
 </div>
+
+<ng-template #noProducts>
+  <p>No products available.</p>
+</ng-template>

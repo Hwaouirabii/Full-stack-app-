@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  backend1:
+    build: ./backend
+    container_name: backend1
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/ecommerce
+    ports:
+    - "5001:5000"
+    depends_on:
+      - mongo
+
+  backend2:
+    build: ./backend
+    container_name: backend2
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/ecommerce
+    ports:
+    - "5002:5000"
+    depends_on:
+      - mongo
+
+  backend3:
+    build: ./backend
+    container_name: backend3
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/ecommerce
+    ports:
+    - "5003:5000"
+    depends_on:
+      - mongo
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - backend1
+      - backend2
+      - backend3
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "3000:80" # Frontend will run on port 3000
+    depends_on:
+      - nginx
+
+volumes:
+  mongo-data:
