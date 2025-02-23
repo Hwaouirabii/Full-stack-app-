@@ -1,8 +1,19 @@
 <h2>Cart</h2>
-<ul>
-  <li *ngFor="let item of cartItems; let i = index">
-    {{ item.name }} - ${{ item.price }}
-    <button (click)="removeItem(i)">Remove</button>
-  </li>
-</ul>
+<table>
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Price</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of cartItems; let i = index">
+      <td>{{ item.name }}</td>
+      <td>${{ item.price }}</td>
+      <td><button (click)="removeItem(i)">Remove</button></td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Total:</strong> ${{ totalPrice }}</p>
 <button (click)="clearCart()">Clear Cart</button>

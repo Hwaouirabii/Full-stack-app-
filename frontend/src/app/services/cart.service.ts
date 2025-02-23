@@ -6,8 +6,6 @@ import { Injectable } from '@angular/core';
 export class CartService {
   private cartItems: any[] = [];
 
-  constructor() {}
-
   addToCart(product: any) {
     this.cartItems.push(product);
   }
@@ -16,11 +14,11 @@ export class CartService {
     return this.cartItems;
   }
 
-  clearCart() {
-    this.cartItems = [];
-  }
-
   removeItem(index: number) {
     this.cartItems.splice(index, 1);
+  }
+
+  clearCart() {
+    this.cartItems = [];
   }
 }

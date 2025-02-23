@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ProductService } from '../../services/product.service';
-import { Router } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-product-list',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css'],
 })
@@ -13,7 +15,6 @@ export class ProductListComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private router: Router,
     private cartService: CartService
   ) {}
 
@@ -22,10 +23,6 @@ export class ProductListComponent implements OnInit {
       (data) => (this.products = data),
       (error) => console.error(error)
     );
-  }
-
-  viewProduct(id: string) {
-    this.router.navigate(['/product', id]);
   }
 
   addToCart(product: any) {

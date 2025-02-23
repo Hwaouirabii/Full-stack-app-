@@ -1,8 +1,10 @@
 <h2>Product List</h2>
-<ul>
-  <li *ngFor="let product of products">
-    {{ product.name }} - ${{ product.price }}
-    <button (click)="viewProduct(product._id)">View</button>
+<div class="product-grid">
+  <div *ngFor="let product of products" class="product-card">
+    <img [src]="product.image" [alt]="product.name" class="product-image">
+    <h3>{{ product.name }}</h3>
+    <p>{{ product.description }}</p>
+    <p><strong>Price:</strong> ${{ product.price }}</p>
     <button (click)="addToCart(product)">Add to Cart</button>
-  </li>
-</ul>
+  </div>
+</div>

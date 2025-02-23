@@ -1,15 +1,19 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ProductListComponent } from './components/product-list/product-list.component';
+import { CartComponent } from './components/cart/cart.component';
 
 @Component({
   selector: 'app-root',
-  template: `
-    <nav>
-      <a routerLink="/">Home</a> |
-      <a routerLink="/cart">Cart</a>
-    </nav>
-    <router-outlet></router-outlet>
-    <!-- This is where routed components will be rendered -->
-  `,
+  standalone: true,
+  imports: [CommonModule, ProductListComponent, CartComponent],
+  templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent {}
+export class AppComponent {
+  currentComponent: string = 'product-list';
+
+  loadComponent(componentName: string) {
+    this.currentComponent = componentName;
+  }
+}
