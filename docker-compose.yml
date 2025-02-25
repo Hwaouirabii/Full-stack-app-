@@ -15,9 +15,14 @@ services:
     environment:
       - MONGO_URI=mongodb://mongo:27017/ecommerce
     ports:
-    - "5001:5000"
+      - "5001:5000"
     depends_on:
       - mongo
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"] # Add a health endpoint in your backend
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   backend2:
     build: ./backend
@@ -25,9 +30,14 @@ services:
     environment:
       - MONGO_URI=mongodb://mongo:27017/ecommerce
     ports:
-    - "5002:5000"
+      - "5002:5000"
     depends_on:
       - mongo
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   backend3:
     build: ./backend
@@ -35,9 +45,14 @@ services:
     environment:
       - MONGO_URI=mongodb://mongo:27017/ecommerce
     ports:
-    - "5003:5000"
+      - "5003:5000"
     depends_on:
       - mongo
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   nginx:
     image: nginx:latest
@@ -47,15 +62,18 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
     depends_on:
-      - backend1
-      - backend2
-      - backend3
+      backend1:
+        condition: service_healthy
+      backend2:
+        condition: service_healthy
+      backend3:
+        condition: service_healthy
 
   frontend:
     build: ./frontend
     container_name: frontend
     ports:
-      - "3000:80" # Frontend will run on port 3000
+      - "4000:4000"
     depends_on:
       - nginx
 

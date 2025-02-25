@@ -2,8 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const productRoutes = require("./routes/productRoutes.js");
-const userRoutes = require("./routes/userRoutes");
+const customerRoutes = require("./routes/customers"); // Corrected import
 
 dotenv.config();
 
@@ -16,14 +15,27 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use("/api/products", productRoutes);
-app.use("/api/users", userRoutes);
+app.use("/api/customers", customerRoutes); // Use customerRoutes
+
+// Default route
+app.get("/", (req, res) => {
+  res.send("Welcome to Customers API!");
+});
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK' });
+});
 
 // Connect to MongoDB
 mongoose
   .connect(MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.log(err));
-
-// Start the server
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  .then(() => {
+    console.log("MongoDB connected");
+    // Start the server after MongoDB connection is established
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+  });
