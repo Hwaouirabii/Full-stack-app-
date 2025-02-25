@@ -11,5 +11,5 @@ FROM node:18
 WORKDIR /app
 COPY --from=build /app/dist/frontend /app
 RUN npm install -g http-server
-EXPOSE 80
-CMD ["http-server", "-p", "80"]
+EXPOSE 4000
+CMD ["http-server", "-p", "4000"]
